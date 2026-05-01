@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      // Usa Custom Claims do Firebase Auth para verificar admin.
+      // Para definir o claim, execute via Firebase Admin SDK:
+      //   admin.auth().setCustomUserClaims(uid, { admin: true })
+      // Ou via Firebase Console > Authentication > Users > Custom Claims
+      return request.auth.token.admin == true;
+    }
+    
+    match /users/{userId} {
+      allow get: if isSignedIn() && (isOwner(userId) || isAdmin());
+      allow write: if isSignedIn() && isOwner(userId);
+      allow list: if isAdmin();
+      allow delete: if isAdmin();
+
+      match /appointments/{appointmentId} {
+        allow read: if isSignedIn() && (isOwner(userId) || isAdmin());
+        allow write: if isSignedIn() && isOwner(userId);
+        allow delete: if isSignedIn() && (isOwner(userId) || isAdmin());
+      }
+    }
+
+    match /barbers/{barberId} {
+        // Leitura pública dos perfis de barbeiros (necessário para listagem e página de perfil)
+        allow read: if true;
+        allow write: if isSignedIn() && (isOwner(barberId) || isAdmin());
+        allow delete: if isAdmin();
+
+        match /appointments/{appointmentId} {
+          // Apenas o barbeiro, o administrador ou o cliente dono do agendamento pode ler
+          allow read: if isSignedIn() && (isOwner(barberId) || isAdmin() || resource.data.customerId == request.auth.uid);
+          // Apenas clientes autenticados podem criar agendamentos vinculados ao seu próprio UID
+          allow create: if isSignedIn() && request.resource.data.customerId == request.auth.uid;
+          // Deletar agendamento: o barbeiro, o admin ou o cliente
+          allow delete: if isSignedIn() && (isOwner(barberId) || isAdmin() || resource.data.customerId == request.auth.uid);
+          allow update: if false; // Por segurança, agendamentos são imutáveis após criados (devem ser recriados se mudar algo)
+        }
+
+        match /reviews/{reviewId} {
+          allow read: if true;
+          allow create: if isSignedIn() && request.resource.data.customerId == request.auth.uid;
+          allow update: if false;
+          allow delete: if isAdmin();
+        }
+    }
+    
+    // Suporte para consultas de grupo de avaliações
+    match /{path=**}/reviews/{reviewId} {
+      allow list: if true;
+    }
+  }
+}

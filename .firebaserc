@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "helpbarber": "studio-5735207536-45873"
+  },
+  "targets": {
+    "studio-5735207536-45873": {
+      "hosting": {
+        "helpbarber": [
+          "helpbarber"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

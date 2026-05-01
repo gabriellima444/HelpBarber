@@ -1,0 +1,28 @@
+{
+  "placeholderImages": [
+    {
+      "id": "avatar-1",
+      "description": "Avatar Abstrato Azul",
+      "imageUrl": "https://api.dicebear.com/7.x/identicon/svg?seed=Help1&backgroundColor=b6e3f4",
+      "imageHint": "abstract avatar"
+    },
+    {
+      "id": "avatar-2",
+      "description": "Avatar Abstrato Roxo",
+      "imageUrl": "https://api.dicebear.com/7.x/identicon/svg?seed=Help2&backgroundColor=c0aede",
+      "imageHint": "abstract avatar"
+    },
+    {
+      "id": "avatar-3",
+      "description": "Avatar Abstrato Verde",
+      "imageUrl": "https://api.dicebear.com/7.x/identicon/svg?seed=Help3&backgroundColor=d1d4f9",
+      "imageHint": "abstract avatar"
+    },
+    {
+      "id": "style-advisor-hero",
+      "description": "Imagem de herói para a página do Consultor de Estilo",
+      "imageUrl": "https://images.unsplash.com/photo-1532710093739-947053e4148e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYW4lMjBoYWlyY3V0fGVufDB8fHx8MTc2Mjg4MzgwMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man haircut"
+    }
+  ]
+}
